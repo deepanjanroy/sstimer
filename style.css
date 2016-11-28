@@ -1,0 +1,16 @@
+body {
+    font-family: monospace;
+    font-size: 20pt;
+}
+
+button {
+    font-size: inherit;
+}
+
+input {
+    font-size: inherit;
+}
+
+.timer {
+    margin-top: 20px;
+}
