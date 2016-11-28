@@ -19,8 +19,10 @@ function stepTimer() {
       : Math.ceil(floatingMinutes);
   var textColor = timeLeft > 0 ? 'blue' : 'red';
   var sign = timeLeft > 0 ? '' : '-';
+  // zero pad and two decimal digits after.
+  var displaySeconds = ('0' + secondsLeft.toFixed(2)).slice(-5);
 
-  timerText.innerText = `${sign}${Math.abs(minutesLeft)}:${secondsLeft.toFixed(2)}`;
+  timerText.innerText = `${sign}${Math.abs(minutesLeft)}:${displaySeconds}`;
   timerText.style.color = textColor;
 
   if (!notified && timeLeft < 0) {
