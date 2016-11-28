@@ -35,6 +35,7 @@ function stepTimer() {
       running = false;
       notified = false;
       notif.close();
+      window.focus();
     });
   }
 
