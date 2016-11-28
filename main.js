@@ -43,6 +43,7 @@ function startTimer() {
   var timerMinutes = parseFloat(minutesInput.value);
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
   running = true;
+  notified = false;
   stepTimer();
 }
 
