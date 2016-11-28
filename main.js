@@ -1,11 +1,7 @@
-Notification.requestPermission().then(function(result) {
-});
-
+Notification.requestPermission();
 var button = document.querySelector("#startTimer");
 var minutesInput = document.querySelector("#numMinutes");
 var timerText = document.querySelector("#timerText");
-
-console.log(minutesInput.value);
 
 var timerEndTime = null;
 var notified = false;
@@ -47,7 +43,7 @@ function startTimer() {
   var timerMinutes = parseFloat(minutesInput.value);
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
   running = true;
-  setTimeout(stepTimer, 1000);
+  stepTimer();
 }
 
 button.onclick = startTimer;
