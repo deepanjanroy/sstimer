@@ -42,7 +42,7 @@ function stepTimer() {
   setTimeout(stepTimer, 0.1);
 }
 
-button.onclick = function() {
+function startTimer() {
   var currTime = new Date();
   var timerMinutes = parseFloat(minutesInput.value);
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
@@ -50,3 +50,8 @@ button.onclick = function() {
   setTimeout(stepTimer, 1000);
 }
 
+button.onclick = startTimer;
+
+minutesInput.onkeydown = event => {
+  if (event.code === 'Enter') startTimer();
+};
