@@ -21,9 +21,11 @@ function stepTimer() {
   var sign = timeLeft > 0 ? '' : '-';
   // zero pad and two decimal digits after.
   var displaySeconds = ('0' + secondsLeft.toFixed(2)).slice(-5);
+  var titleSeconds = displaySeconds.slice(0, 2);
 
   timerText.innerText = `${sign}${Math.abs(minutesLeft)}:${displaySeconds}`;
   timerText.style.color = textColor;
+  document.title = `${sign}${Math.abs(minutesLeft)}:${titleSeconds}`;
 
   if (!notified && timeLeft < 0) {
     notified = true;
