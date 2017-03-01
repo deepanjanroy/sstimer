@@ -5,8 +5,6 @@ var button = document.querySelector("#startTimer");
 var minutesInput = document.querySelector("#numMinutes");
 var timerText = document.querySelector("#timerText");
 
-console.log(minutesInput.value);
-
 var timerEndTime = null;
 var notified = false;
 var running = false;
@@ -55,3 +53,9 @@ button.onclick = startTimer;
 minutesInput.onkeydown = event => {
   if (event.code === 'Enter') startTimer();
 };
+
+// Before unload handler
+window.addEventListener("beforeunload", function (e) {
+    e.returnValue = "No!";
+});
+
