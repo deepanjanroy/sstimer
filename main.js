@@ -54,7 +54,8 @@ function startTimer() {
 button.onclick = startTimer;
 
 minutesInput.onkeydown = event => {
-  if (event.code === 'Enter') startTimer();
+  // 13 is the keyCode of enter key
+  if (event.keyCode === 13) startTimer();
 };
 
 // Before unload handler
