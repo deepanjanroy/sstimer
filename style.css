@@ -21,3 +21,10 @@ input {
     font-family: monospace;
     font-size: 14px;
 }
+
+#notification-text {
+    width: 350px;
+    height: 100px;
+    font-family: monospace;
+    font-size: 14px;
+}

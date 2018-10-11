@@ -29,7 +29,8 @@ function stepTimer() {
 
   if (!notified && timeLeft < 0) {
     notified = true;
-    var notif = new Notification("Beep beep");
+    notifContent = document.querySelector('#notification-text').value;
+    var notif = new Notification("Beep beep", {body: notifContent});
     notif.addEventListener('click', () => {
       console.log("Notification clicked");
       running = false;
@@ -39,6 +40,8 @@ function stepTimer() {
     });
   }
 
+  // Not using requestAnimationFrame, because the tab title needs to change when
+  // the tab is backgrounded.
   setTimeout(stepTimer, 0.1);
 }
 
