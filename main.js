@@ -7,8 +7,25 @@ var timerEndTime = null;
 var notified = false;
 var running = false;
 
+let lastExecution = 0;
+let timerId = null;
+let rafScheduled = false;
+
+function scheduleRaf(f) {
+  if (!rafScheduled) {
+    rafScheduled = true;
+    requestAnimationFrame(() => {
+      rafScheduled = false;
+      f();
+    })
+  }
+}
+
 function stepTimer() {
-  if (!running) return;
+  if (!running) {
+    clearInterval(timerId);
+    return;
+  }
   var currTime = new Date();
 
   var timeLeft = timerEndTime - currTime;
@@ -40,9 +57,13 @@ function stepTimer() {
     });
   }
 
-  // Not using requestAnimationFrame, because the tab title needs to change when
-  // the tab is backgrounded.
-  setTimeout(stepTimer, 0.1);
+  scheduleRaf(stepTimer);
+
+  if (timerId === null) {
+    // Every second, force update even if in background, so that the tab title
+    // gets updated.
+    timerId = setInterval(stepTimer, 1000 /* ms */);
+  }
 }
 
 function startTimer() {
