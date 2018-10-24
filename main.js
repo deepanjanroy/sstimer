@@ -24,6 +24,7 @@ function scheduleRaf(f) {
 function stepTimer() {
   if (!running) {
     clearInterval(timerId);
+    timerId = null;
     return;
   }
   var currTime = new Date();
