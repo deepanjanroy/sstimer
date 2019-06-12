@@ -17,7 +17,7 @@ function scheduleRaf(f) {
     requestAnimationFrame(() => {
       rafScheduled = false;
       f();
-    })
+    });
   }
 }
 
