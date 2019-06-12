@@ -67,27 +67,44 @@ function stepTimer() {
   }
 }
 
-function startTimer() {
-  var currTime = new Date();
-  var timerMinutes = parseFloat(minutesInput.value);
+function startTimer(timerMinutes) {
+  const currTime = new Date();
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
   running = true;
   notified = false;
   stepTimer();
 }
 
-button.onclick = startTimer;
+
+function startTimerFromParam() {
+  const url = new URL(window.location.href);
+  const minutes = parseInt(url.searchParams.get('minutes'));
+  minutesInput.value = minutes;
+  if (!isNaN(minutes)) {
+    startTimer(minutes);
+  }
+}
+
+let unloadHandler;
+function installUnloadHandler() {
+  unloadHandler = window.addEventListener("beforeunload", function (e) {
+    e.returnValue = "No!";
+  });
+}
+
+function startTimerFromInput() {
+  // Install unload handler only when timer started from input box.
+  // Otherwise it's fine to let the tab close quickly.
+  installUnloadHandler();
+  startTimer(parseFloat(minutesInput.value));
+}
+
+button.onclick = startTimerFromInput;
 
 minutesInput.onkeydown = event => {
   // 13 is the keyCode of enter key
-  if (event.keyCode === 13) startTimer();
+  if (event.keyCode === 13) startTimerFromInput();
 };
-
-// Before unload handler
-window.addEventListener("beforeunload", function (e) {
-    e.returnValue = "No!";
-});
-
 
 // Handle tab in text area
 document.querySelector("textarea").addEventListener('keydown',function(e) {
@@ -112,5 +129,6 @@ document.querySelector("textarea").addEventListener('keydown',function(e) {
     }
 },false);
 
-
 // TODO: Make the return key put add equal amounts of indent as previous line
+
+startTimerFromParam();
