@@ -2,14 +2,29 @@ Notification.requestPermission();
 var button = document.querySelector("#startTimer");
 var minutesInput = document.querySelector("#numMinutes");
 var timerText = document.querySelector("#timerText");
+const speakCheckbox = document.querySelector("#speak");
 
-var timerEndTime = null;
-var notified = false;
-var running = false;
+let timerEndTime = null;
+let notified = false;
+let running = false;
+let lastMinuteNotified = -1;
+
 
 let lastExecution = 0;
 let timerId = null;
 let rafScheduled = false;
+
+
+
+function speakTimeRemaining(minutesLeft) {
+  const utterance = new SpeechSynthesisUtterance(minutesLeft + " minutes left.");
+  const ukFemaleVoice = window.speechSynthesis.getVoices()
+        .filter(x => x.voiceURI === "Google UK English Female")[0];
+  if (ukFemaleVoice !== undefined) {
+    utterance.voice = ukFemaleVoice;
+  }
+  window.speechSynthesis.speak(utterance);
+}
 
 function scheduleRaf(f) {
   if (!rafScheduled) {
@@ -58,8 +73,16 @@ function stepTimer() {
     });
   }
 
+  if (speakCheckbox.checked) {
+    if (Math.floor(secondsLeft) === 0 && minutesLeft !== lastMinuteNotified) {
+      lastMinuteNotified = minutesLeft;
+      speakTimeRemaining(minutesLeft);
+    }
+  }
+
   scheduleRaf(stepTimer);
 
+  // TODO: Not sure if it's doing what I think it's doing.
   if (timerId === null) {
     // Every second, force update even if in background, so that the tab title
     // gets updated.
@@ -72,15 +95,16 @@ function startTimer(timerMinutes) {
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
   running = true;
   notified = false;
+  lastMinuteNotified = -1;
   stepTimer();
 }
 
 
 function startTimerFromParam() {
   const url = new URL(window.location.href);
-  const minutes = parseInt(url.searchParams.get('minutes'));
-  minutesInput.value = minutes;
+  const minutes = parseFloat(url.searchParams.get('minutes'));
   if (!isNaN(minutes)) {
+    minutesInput.value = minutes;
     startTimer(minutes);
   }
 }
