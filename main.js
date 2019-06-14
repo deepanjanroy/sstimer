@@ -1,3 +1,6 @@
+// Do this first thing so it starts loading voices from the server.
+window.speechSynthesis.getVoices();
+
 Notification.requestPermission();
 var button = document.querySelector("#startTimer");
 var minutesInput = document.querySelector("#numMinutes");
@@ -17,7 +20,9 @@ let rafScheduled = false;
 
 
 function speakTimeRemaining(minutesLeft) {
-  const utterance = new SpeechSynthesisUtterance(minutesLeft + " minutes left.");
+  const timesUpMsg = minutesLeft === 0 ? " Times up!" : "";
+  const utterance = new SpeechSynthesisUtterance(
+    minutesLeft + " minutes left." + timesUpMsg);
   const ukFemaleVoice = window.speechSynthesis.getVoices()
         .filter(x => x.voiceURI === "Google UK English Female")[0];
   if (ukFemaleVoice !== undefined) {
