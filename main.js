@@ -20,7 +20,12 @@ let rafScheduled = false;
 
 
 function speakTimeRemaining(minutesLeft) {
-  const timesUpMsg = minutesLeft === 0 ? " Times up!" : "";
+  const minutesFloor = Math.floor(minutesLeft);
+  // TODO: The logic for shouldSpeak can be more sophisticated.
+  const shouldSpeak = [1, 2, 3].includes(minutesFloor)
+        || minutesLeft % 5 === 0;
+  if (!shouldSpeak) return;
+  const timesUpMsg = minutesFloor === 0 ? " Times up!" : "";
   const utterance = new SpeechSynthesisUtterance(
     minutesLeft + " minutes left." + timesUpMsg);
   const ukFemaleVoice = window.speechSynthesis.getVoices()
