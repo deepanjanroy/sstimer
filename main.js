@@ -3,6 +3,8 @@ window.speechSynthesis.getVoices();
 
 Notification.requestPermission();
 var button = document.querySelector("#startTimer");
+const untilNextButton = document.querySelector("#untilNext");
+const untilNextPlusOneButton = document.querySelector("#untilNextPlusOne");
 var minutesInput = document.querySelector("#numMinutes");
 var timerText = document.querySelector("#timerText");
 const speakCheckbox = document.querySelector("#speak");
@@ -134,6 +136,45 @@ function startTimerFromInput() {
 }
 
 button.onclick = startTimerFromInput;
+
+untilNextButton.onclick = () => {
+  installUnloadHandler();
+  const currentTime = new Date();
+  const targetTime = new Date(currentTime);
+  if (currentTime.getMinutes() < 25) {
+    targetTime.setMinutes(25);
+  } else if (currentTime.getMinutes() < 55) {
+    targetTime.setMinutes(55);
+  } else {
+    targetTime.setHours(currentTime.getHours() + 1);
+    targetTime.setMinutes(25);
+  }
+
+  const deltaMs = targetTime.getTime() - currentTime.getTime();
+  const deltaMinutes = deltaMs / 1e3 / 60;
+  startTimer(deltaMinutes);
+}
+
+untilNextPlusOneButton.onclick = () => {
+  installUnloadHandler();
+  const currentTime = new Date();
+  const targetTime = new Date(currentTime);
+  if (currentTime.getMinutes() < 25) {
+    targetTime.setMinutes(55);
+  } else if (currentTime.getMinutes() < 55) {
+    targetTime.setHours(currentTime.getHours() + 1);
+    targetTime.setMinutes(25);
+  } else {
+    targetTime.setHours(currentTime.getHours() + 1);
+    targetTime.setMinutes(55);
+  }
+
+  const deltaMs = targetTime.getTime() - currentTime.getTime();
+  const deltaMinutes = deltaMs / 1e3 / 60;
+  startTimer(deltaMinutes);
+}
+
+
 
 minutesInput.onkeydown = event => {
   // 13 is the keyCode of enter key
