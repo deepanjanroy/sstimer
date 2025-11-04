@@ -9,7 +9,13 @@ var minutesInput = document.querySelector("#numMinutes");
 var timerText = document.querySelector("#timerText");
 const speakCheckbox = document.querySelector("#speak");
 
+// Progress bar elements
+const progressContainer = document.querySelector("#progressContainer");
+const progressFill = document.querySelector("#progressFill");
+const progressText = document.querySelector("#progressText");
+
 let timerEndTime = null;
+let timerStartTime = null;
 let notified = false;
 let running = false;
 let lastMinuteNotified = -1;
@@ -52,6 +58,7 @@ function stepTimer() {
   if (!running) {
     clearInterval(timerId);
     timerId = null;
+    progressContainer.style.display = 'none';
     return;
   }
   var currTime = new Date();
@@ -71,6 +78,19 @@ function stepTimer() {
   timerText.innerText = `${sign}${Math.abs(minutesLeft)}:${displaySeconds}`;
   timerText.style.color = textColor;
   document.title = `${sign}${Math.abs(minutesLeft)}:${titleSeconds}`;
+
+  // Update progress bar
+  if (timerStartTime !== null) {
+    const totalTime = timerEndTime - timerStartTime;
+    const elapsedTime = currTime - timerStartTime;
+    let progress = (elapsedTime / totalTime) * 100;
+
+    // Clamp progress between 0 and 100
+    progress = Math.max(0, Math.min(100, progress));
+
+    progressFill.style.width = `${progress}%`;
+    progressText.innerText = `${Math.round(progress)}%`;
+  }
 
   if (!notified && timeLeft < 0) {
     notified = true;
@@ -104,10 +124,17 @@ function stepTimer() {
 
 function startTimer(timerMinutes) {
   const currTime = new Date();
+  timerStartTime = currTime.getTime();
   timerEndTime = currTime.getTime() + (timerMinutes * 60 * 1000);
   running = true;
   notified = false;
   lastMinuteNotified = -1;
+
+  // Show and reset progress bar
+  progressContainer.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressText.innerText = '0%';
+
   stepTimer();
 }
 
